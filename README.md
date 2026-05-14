@@ -1,2 +1,2 @@
-# PerpetualBee.github.io
+# PerpetualBoahemaa.github.io
 Personal portfolio site - Data Analyst
