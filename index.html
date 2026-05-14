@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boahemaa Perpetual — Data Analyst</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #FFFFFF;
+      --bg-tint:  #F4F4F4;
+      --bg-deep:  #DEDEDE;
+      --ink:      #0A0A0A;
+      --ink-mid:  #2A2A2A;
+      --ink-soft: #6B6B6B;
+      --plum:     #0A0A0A;
+      --plum-hi:  #333333;
+      --mauve:    #999999;
+      --rule:     #D0D0D0;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Lora', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); border-bottom: 1px solid var(--rule);
+      padding: 0 6vw; height: 54px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'DM Mono', monospace; font-size: 10.5px;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--ink-mid); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-soft); text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--plum); }
+
+    /* HERO */
+    .hero { max-width: 1160px; margin: 0 auto; padding: 5.5rem 6vw 4rem; }
+    .hero-kicker {
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--plum); display: flex; align-items: center;
+      gap: 0.9rem; margin-bottom: 1.6rem;
+      opacity: 0; animation: fadeUp 0.7s 0.05s ease forwards;
+    }
+    .hero-kicker::after { content: ''; display: block; width: 52px; height: 1px; background: var(--plum); }
+    .hero-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(3.6rem, 9vw, 7.5rem); font-weight: 700;
+      line-height: 0.93; letter-spacing: -0.02em; color: var(--ink);
+      opacity: 0; animation: fadeUp 0.7s 0.15s ease forwards;
+    }
+    .hero-name em { font-style: italic; color: var(--plum); }
+    .hero-rule {
+      display: flex; align-items: center; gap: 1.2rem; margin: 2.6rem 0;
+      opacity: 0; animation: fadeUp 0.6s 0.25s ease forwards;
+    }
+    .hero-rule::before, .hero-rule::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+    .hero-rule-gem { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--rule); }
+    .hero-body {
+      display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 4rem; align-items: start;
+      opacity: 0; animation: fadeUp 0.6s 0.32s ease forwards;
+    }
+    .hero-bio { font-size: 1rem; color: var(--ink-mid); line-height: 1.85; }
+    .hero-bio p + p { margin-top: 0.9em; }
+    .hero-aside { border-left: 2px solid var(--plum); padding-left: 1.6rem; }
+    .aside-block { margin-bottom: 1.4rem; }
+    .aside-block:last-child { margin-bottom: 0; }
+    .aside-label {
+      font-family: 'DM Mono', monospace; font-size: 9px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--ink-soft); margin-bottom: 0.3rem;
+    }
+    .aside-val { font-family: 'Lora', serif; font-size: 0.91rem; color: var(--ink-mid); }
+
+    /* SECTIONS */
+    .section-wrap { max-width: 1160px; margin: 0 auto; padding: 5rem 6vw; }
+    .section-tinted { background: var(--bg-tint); padding: 5rem 6vw; }
+    .section-inner { max-width: 1160px; margin: 0 auto; }
+    .section-head { display: flex; align-items: baseline; gap: 1.2rem; margin-bottom: 3.5rem; }
+    .section-num { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--plum); }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 600; color: var(--ink); }
+    .section-line { flex: 1; height: 1px; background: var(--rule); }
+
+    /* PROJECTS */
+    .project {
+      display: grid; grid-template-columns: 72px 1fr;
+      padding: 2.6rem 0; border-bottom: 1px solid var(--rule); position: relative;
+    }
+    .project:first-child { border-top: 1px solid var(--rule); }
+    .project::before {
+      content: ''; position: absolute; inset: 0 -6vw;
+      background: var(--bg-tint); opacity: 0; transition: opacity 0.25s;
+    }
+    .project:hover::before { opacity: 1; }
+    .proj-num {
+      font-family: 'Playfair Display', serif; font-size: 2.9rem;
+      font-weight: 700; color: var(--bg-deep); line-height: 1;
+      padding-top: 0.15em; position: relative; z-index: 1;
+    }
+    .proj-body { position: relative; z-index: 1; }
+    .proj-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
+    .tag {
+      font-family: 'DM Mono', monospace; font-size: 8.5px;
+      letter-spacing: 0.13em; text-transform: uppercase;
+      padding: 0.18rem 0.5rem; border-radius: 1px;
+    }
+    .tag-primary { color: var(--plum); border: 1px solid var(--plum); }
+    .tag-muted   { color: var(--ink-soft); border: 1px solid var(--rule); }
+    .proj-title {
+      font-family: 'Playfair Display', serif; font-size: 1.4rem;
+      font-weight: 600; color: var(--ink); line-height: 1.25; margin-bottom: 0.55rem;
+    }
+    .proj-desc { font-size: 0.91rem; color: var(--ink-mid); line-height: 1.75; max-width: 680px; margin-bottom: 1rem; }
+    .proj-pull {
+      font-family: 'Lora', serif; font-style: italic; font-size: 0.88rem;
+      color: var(--ink-soft); border-left: 2px solid var(--mauve);
+      padding-left: 1rem; margin-bottom: 1.2rem; max-width: 600px;
+    }
+    .proj-links { display: flex; gap: 1.4rem; flex-wrap: wrap; align-items: center; }
+    .proj-link {
+      font-family: 'DM Mono', monospace; font-size: 9.5px;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--plum);
+      text-decoration: none; display: inline-flex; align-items: center;
+      gap: 0.35rem; transition: gap 0.2s;
+    }
+    .proj-link:hover { gap: 0.6rem; }
+    .proj-link svg { width: 9px; height: 9px; flex-shrink: 0; }
+    .proj-link-soon {
+      font-family: 'DM Mono', monospace; font-size: 9.5px;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft);
+    }
+
+    /* CREDENTIAL */
+    .credential {
+      margin-top: 1.5rem; background: var(--bg-tint); border: 1px solid var(--rule);
+      padding: 2rem 2.5rem; display: grid; grid-template-columns: 220px 1fr;
+      gap: 2.5rem; align-items: start;
+    }
+    .credential:first-of-type { margin-top: 3rem; }
+    .cred-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--plum); margin-bottom: 0.4rem; }
+    .cred-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--ink); margin-bottom: 0.25rem; }
+    .cred-sub { font-family: 'Lora', serif; font-size: 0.83rem; color: var(--ink-soft); }
+    .cred-body { font-size: 0.88rem; color: var(--ink-mid); line-height: 1.8; }
+
+    /* SKILLS */
+    .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem 3rem; }
+    .skill-group-label {
+      font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--plum); padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--rule); margin-bottom: 0.9rem;
+    }
+    .skill-list { list-style: none; }
+    .skill-list li {
+      font-family: 'Lora', serif; font-size: 0.88rem; color: var(--ink-mid);
+      padding: 0.3rem 0; border-bottom: 1px solid var(--bg-deep);
+      display: flex; align-items: center; gap: 0.55rem;
+    }
+    .skill-list li::before { content: ''; display: block; width: 4px; height: 4px; background: var(--plum); border-radius: 50%; flex-shrink: 0; }
+
+    /* CONTACT */
+    .contact-band { background: var(--ink); padding: 5.5rem 6vw; }
+    .contact-inner { max-width: 1160px; margin: 0 auto; }
+    .contact-kicker { font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mauve); margin-bottom: 1rem; }
+    .contact-heading { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4.5vw, 3.6rem); font-weight: 600; color: var(--bg); line-height: 1.15; margin-bottom: 1.4rem; }
+    .contact-heading em { font-style: italic; color: var(--mauve); }
+    .contact-note { font-size: 0.92rem; color: rgba(255,255,255,0.6); line-height: 1.8; max-width: 480px; }
+    .contact-links { display: flex; flex-wrap: wrap; gap: 1.8rem; margin-top: 2.8rem; }
+    .contact-link {
+      font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #FFFFFF; text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.25); padding-bottom: 0.2rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .contact-link:hover { color: var(--mauve); border-color: var(--mauve); }
+
+    /* FOOTER */
+    footer { background: var(--ink); border-top: 1px solid rgba(204,176,224,0.12); padding: 1.4rem 6vw; }
+    .footer-inner { max-width: 1160px; margin: 0 auto; display: flex; justify-content: space-between; }
+    footer p { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: rgba(245,240,250,0.3); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 800px) {
+      .hero-body { grid-template-columns: 1fr; gap: 2.2rem; }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      .credential { grid-template-columns: 1fr; gap: 1.2rem; }
+      .project { grid-template-columns: 52px 1fr; }
+    }
+    @media (max-width: 520px) {
+      .skills-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+
+/* ╔═══════════════════════════════════════════════════════════════════╗
+   ║   ✏  YOUR CONTENT — edit anything between the quotes            ║
+   ║   Rules: do not delete commas, brackets or quote marks.         ║
+   ║   To add a new project: copy one project block and paste below. ║
+   ╚═══════════════════════════════════════════════════════════════════╝ */
+
+const C = {
+
+  /* ── Name ──────────────────────────────────────────────────────── */
+  name: {
+    first: "Perpetual",
+    last:  "Boahemaa"
+  },
+
+  /* ── Tagline and location ──────────────────────────────────────── */
+  tagline:  "Data Analyst & Researcher",
+  location: "Accra, Ghana",
+
+  /* ── Bio paragraphs ────────────────────────────────────────────── */
+  bio: [
+    "Data is only as good as the action it inspires, which is why I specialise in taking such data and refining it into meaningful insights and actionable recommendations. With my background in electrical engineering, I apply an engineer's discipline to the data pipeline. From the first query to the final presentation, I use modelling and analytics to explain why the numbers are moving and the best way to use that knowledge to move forward.",
+    "My projects are grounded in real questions: Why are customers leaving? How long will this asset last? Where are students falling behind? I am looking for a remote data analyst role where that mindset can make a measurable difference."
+  ],
+
+  /* ── Sidebar facts ─────────────────────────────────────────────── */
+  aside: [
+    { label: "Education",  value: "BSc Electrical & Electronic Engineering, First Class — KNUST, 2024" },
+    { label: "Open to",    value: "Remote data analyst roles, globally" }
+  ],
+
+  /* ── Projects ──────────────────────────────────────────────────────
+     Each project has:
+       number      — displayed large in the left column
+       tags        — pills shown above the title; primary: true = plum outline
+       title       — the project headline
+       description — main paragraph
+       pull        — italic framing question
+       links       — array of { text, url }
+                     set url to null for a "coming soon" label
+  ─────────────────────────────────────────────────────────────────── */
+  projects: [
+    {
+      number: "01",
+      tags: [
+        { text: "R",                              primary: true  },
+        { text: "Tableau",                        primary: true  },
+        { text: "EDA",                            primary: true  },
+        { text: "Google Data Analytics Capstone", primary: false }
+      ],
+      title:       "Bellabeat Wellness Tracker Analysis",
+      description: "Bellabeat's co-founder wanted data-driven evidence to guide marketing strategy for the company's smart devices. The question was how do women actually use fitness trackers day to day, and what does that reveal about how to advertise the product? Using Fitbit daily activity data from 30 users, I analysed activity intensity against calories burned and mapped patterns across the week. The analysis surfaced two findings. Firstly, regardless of calories burned, users spent the greatest share of their time in lightly active and sedentary modes, meaning the device is worn throughout the day and not just during workouts. Secondly, on Tuesdays, Thursdays and Sundays, sedentary minutes significantly outpaced active ones, making those the days users were most passive and most reachable. The recommendations from these findings were to market the device as a chic everyday accessory rather than a fitness tool, and to run targeted ads on those three days. Findings are directional given the sample size and would benefit from a larger dataset.",
+      pull:        "Most fitness marketing assumes the user is at the gym. The data said otherwise.",
+      links: [
+        { text: "View on Kaggle",        url: "https://www.kaggle.com/code/perpetualboahemaa/case-study-for-bellabeat-company" },
+        { text: "View Tableau Dashboard", url: "https://public.tableau.com/app/profile/perpetual.boahemaa/viz/BellabeatFitnessTrackerAnalysis_17786874009720/BellabeatFitnessTrackerAnalysis" }
+      ]
+    },
+    {
+      number: "02",
+      tags: [
+        { text: "Python",             primary: true  },
+        { text: "Scikit-learn",       primary: true  },
+        { text: "Logistic Regression",primary: true  },
+        { text: "Machine Learning",   primary: false }
+      ],
+      title:       "Telco Customer Churn Prediction",
+      description: "A telco company was losing customers and needed to know why. Before building the full model, I explored individual variables to test which ones showed meaningful variation with churn. Lower-tenure customers were noticeably more likely to leave, making the early customer relationship the critical window. I then built a logistic regression model across all customer features and ranked predictors by their absolute coefficients to identify what actually moves the needle. Five drivers emerged: tenure, contract type, online security, payment method and internet service type. The output was a ranked set of levers the business could pull to retain customers and not just a list of at-risk customers.",
+      pull:        "Identifying who might leave solves nothing if you do not know what to change.",
+      links: [
+        { text: "View on Kaggle", url: "https://www.kaggle.com/code/perpetualboahemaa/customer-churn-analysis-for-a-telco-company" }
+      ]
+    },
+    {
+      number: "03",
+      tags: [
+        { text: "R",                     primary: true  },
+        { text: "Weibull Analysis",      primary: true  },
+        { text: "Survival Analysis",     primary: true  },
+        { text: "Final Year Project",    primary: false }
+      ],
+      title:       "Transformer Asset Lifespan Modelling",
+      description: "The utility company was replacing transformers after they failed. The question was whether historical failure data could support a predictive approach instead. Using 30 months of damage records across three kVA groups, I fitted Weibull probability distribution models in R. The key decision was recognising that age alone was insufficient as two transformers of the same age can have completely different failure outlooks depending on how they fail. A 50kVA unit struck by lightning has a characteristic life of under 5 years. One that ages through moisture ingress can last over 40 years. The multi-variable model highlights this difference, which is what makes it useful for maintenance planning. Based on the results, I recommended installing lightning arrestors and regularly inspecting transformers nearing 22 years and beyond.",
+      pull:        "Before this, the findings were reasonable assumptions. After this, they became defensible decisions.",
+      links: [
+        { text: "View on GitHub", url: "https://github.com/PerpetualBee/transformer-lifespan-modelling" }
+      ]
+    },
+    {
+      number: "04",
+      tags: [
+        { text: "Google Sheets",         primary: true  },
+        { text: "Operational Analytics", primary: true  },
+        { text: "Data Reporting",        primary: true  },
+        { text: "Teaching Assistant, KNUST", primary: false }
+      ],
+      title:       "Student Academic Records & Reporting System",
+      description: "As a teaching assistant for engineering courses at KNUST, I managed academic records for 400+ students per semester using Google Sheets. This involved entering and organising student data, applying formulas to compute totals and averages, assigning grades and maintaining accurate records across multiple courses. I used VLOOKUP to retrieve and cross-reference student information, SUMIF and COUNTIF to summarise performance across groups and conditional formatting to make grade distributions easy to read at a glance. Periodically, I collected and analysed student feedback to identify recurring pain points in the learning experience and presented the findings to the supervising lecturer to inform adjustments to the tutorial schedule.",
+      pull:        "Every semester the records got cleaner. Every semester the teaching got sharper.",
+      links: [
+        { text: "Case Study — Coming Soon", url: null }
+      ]
+    }
+  ],
+
+  /* ── Training credentials (shown below projects) ───────────────── */
+  credentials: [
+    {
+      label: "Training Credential",
+      title: "Google Data Analytics Professional Certificate",
+      org:   "Google / Coursera",
+      year:  "December 2023",
+      body:  "Eight-course programme covering the full data analysis cycle: asking the right questions, preparing and cleaning data, performing analysis and sharing insights through visualisation. Gained hands-on practice in Google Sheets, SQL, R and Tableau. The Bellabeat wellness tracker case study is the capstone project for this certificate."
+    },
+    {
+      label: "Training Credential",
+      title: "Applied Data Science Lab",
+      org:   "WorldQuant University",
+      year:  "2025",
+      body:  "Eight end-to-end projects across the full data science lifecycle: regression and classification pipelines in Python, ARMA and GARCH time-series modelling, k-means clustering with PCA dimensionality reduction, A/B testing and experimental design, ETL pipeline construction, MongoDB and SQLite database integration and deploying model predictions through web APIs."
+    }
+  ],
+
+  /* ── Skills ────────────────────────────────────────────────────── */
+  skills: [
+    {
+      group: "Languages & Libraries",
+      items: [
+        "Python — pandas, scikit-learn",
+        "R — tidyverse, ggplot2, survival",
+        "SQL / MySQL",
+        "Google Sheets — advanced formulas"
+      ]
+    },
+    {
+      group: "Analysis & Modelling",
+      items: [
+        "Exploratory Data Analysis (EDA)",
+        "Regression & Classification",
+        "Statistical Failure Analysis",
+        "Time-Series Modelling",
+        "Clustering & PCA",
+        "A/B Testing & Experimentation"
+      ]
+    },
+    {
+      group: "Visualisation & Reporting",
+      items: [
+        "Tableau",
+        "ggplot2 & matplotlib",
+        "Google Sheets dashboards",
+        "Kaggle notebooks"
+      ]
+    }
+  ],
+
+  /* ── Contact section ───────────────────────────────────────────── */
+  contact: {
+    kicker:   "Let's work together",
+    heading1: "Open to remote roles",
+    heading2: "and interesting problems.",
+    note:     "I am actively looking for remote data analyst positions. If you have a data problem that needs a clear-eyed approach and honest communication, I would love to hear from you.",
+    links: [
+      { text: "Email Me",  url: "mailto:perpetualb07@gmail.com" },
+      { text: "Kaggle",    url: "https://www.kaggle.com/perpetualboahemaa" },
+      { text: "GitHub",    url: "https://github.com/PerpetualBee" }
+    ]
+  }
+
+};
+
+/* ╔═══════════════════════════════════════════════════════════════════╗
+   ║   RENDERER — do not edit below this line                        ║
+   ╚═══════════════════════════════════════════════════════════════════╝ */
+
+function e(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+const ARROW = `<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 1h4v4M11 1L5 7M2 3H1v8h8V9"/></svg>`;
+
+function renderNav() {
+  return `<nav>
+    <a class="nav-logo" href="#">${e(C.name.first)} ${e(C.name.last)}</a>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>`;
+}
+
+function renderHero() {
+  const asideHTML = C.aside.map(a => `
+    <div class="aside-block">
+      <div class="aside-label">${e(a.label)}</div>
+      <div class="aside-val">${e(a.value)}</div>
+    </div>`).join('');
+  const bioHTML = C.bio.map(p => `<p>${e(p)}</p>`).join('');
+  return `<div class="hero">
+    <div class="hero-kicker">${e(C.tagline)} &nbsp;&middot;&nbsp; ${e(C.location)}</div>
+    <h1 class="hero-name">${e(C.name.first)}<br><em>${e(C.name.last)}</em></h1>
+    <div class="hero-rule"><span class="hero-rule-gem">&#10022;</span></div>
+    <div class="hero-body">
+      <div class="hero-bio">${bioHTML}</div>
+      <div class="hero-aside">${asideHTML}</div>
+    </div>
+  </div>`;
+}
+
+function renderProject(p) {
+  const tagsHTML = p.tags.map(t =>
+    `<span class="tag ${t.primary ? 'tag-primary' : 'tag-muted'}">${e(t.text)}</span>`
+  ).join('');
+  const linksHTML = p.links.map(l =>
+    l.url
+      ? `<a class="proj-link" href="${e(l.url)}" target="_blank" rel="noopener">${ARROW} ${e(l.text)}</a>`
+      : `<span class="proj-link-soon">${e(l.text)}</span>`
+  ).join('');
+  return `<div class="project">
+    <div class="proj-num">${e(p.number)}</div>
+    <div class="proj-body">
+      <div class="proj-tags">${tagsHTML}</div>
+      <h3 class="proj-title">${e(p.title)}</h3>
+      <p class="proj-desc">${e(p.description)}</p>
+      <p class="proj-pull">${e(p.pull)}</p>
+      <div class="proj-links">${linksHTML}</div>
+    </div>
+  </div>`;
+}
+
+function renderCredential() {
+  return C.credentials.map(cr => `<div class="credential">
+    <div>
+      <div class="cred-label">${e(cr.label)}</div>
+      <div class="cred-title">${e(cr.title)}</div>
+      <div class="cred-sub">${e(cr.org)} &nbsp;&middot;&nbsp; ${e(cr.year)}</div>
+    </div>
+    <p class="cred-body">${e(cr.body)}</p>
+  </div>`).join('');
+}
+
+function renderSkills() {
+  const groupsHTML = C.skills.map(g => `
+    <div>
+      <div class="skill-group-label">${e(g.group)}</div>
+      <ul class="skill-list">
+        ${g.items.map(i => `<li>${e(i)}</li>`).join('')}
+      </ul>
+    </div>`).join('');
+  return `<div class="section-tinted" id="skills">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <h2 class="section-title">Tools &amp; Skills</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="skills-grid">${groupsHTML}</div>
+    </div>
+  </div>`;
+}
+
+function renderContact() {
+  const linksHTML = C.contact.links.map(l => {
+    const ext = !l.url.startsWith('mailto') && l.url !== '#';
+    return `<a class="contact-link" href="${e(l.url)}"${ext ? ' target="_blank" rel="noopener"' : ''}>${e(l.text)}</a>`;
+  }).join('');
+  return `<div class="contact-band" id="contact">
+    <div class="contact-inner">
+      <div class="contact-kicker">${e(C.contact.kicker)}</div>
+      <h2 class="contact-heading">
+        ${e(C.contact.heading1)}<br><em>${e(C.contact.heading2)}</em>
+      </h2>
+      <p class="contact-note">${e(C.contact.note)}</p>
+      <div class="contact-links">${linksHTML}</div>
+    </div>
+  </div>`;
+}
+
+function renderFooter() {
+  return `<footer>
+    <div class="footer-inner">
+      <p>&copy; 2026 ${e(C.name.first)} ${e(C.name.last)} &nbsp;&middot;&nbsp; All rights reserved</p>
+      <p>${e(C.tagline)} &nbsp;&middot;&nbsp; ${e(C.location)}</p>
+    </div>
+  </footer>`;
+}
+
+function render() {
+  document.title = `${C.name.first} ${C.name.last} — ${C.tagline}`;
+  document.getElementById('app').innerHTML = `
+    ${renderNav()}
+    ${renderHero()}
+    <div class="section-wrap" id="work">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <h2 class="section-title">Selected Work</h2>
+        <div class="section-line"></div>
+      </div>
+      ${C.projects.map(renderProject).join('')}
+      ${renderCredential()}
+    </div>
+    ${renderSkills()}
+    ${renderContact()}
+    ${renderFooter()}
+  `;
+}
+
+render();
+</script>
+</body>
+</html>
